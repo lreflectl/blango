@@ -3,36 +3,44 @@
 
 {% block content %}
 
-<h2>{{ post.title }}</h2>
+{% row 'justify-content-center' %}
+    {% col 'col-8 rounded' %}
+    <h2>{{ post.title }}</h2>
+    {% endcol %}
+{% endrow %}
 
-{% row %}
-    {% col %}
+{% row 'justify-content-center' %}
+    {% col 'col-8 rounded' %}
         {% include "blog/post-byline.html" %}
     {% endcol %}
 {% endrow %}
 
-{% row %}
-    {% col %}
+{% row 'justify-content-center' %}
+    {% col 'col-8 rounded' %}
         {{ post.content|safe }}
     {% endcol %}
 {% endrow %}
 
 {% if post.author.profile %}
-    {% row %}
-        {% col %}
+    {% row 'justify-content-center' %}
+        {% col 'col-8 rounded' %}
             <h4>About the author</h4>
             <p>{{ post.author.profile.bio }}</p>
         {% endcol %}
     {% endrow %}
 {% endif %}
 
-{% include "blog/post-comments.html" %}
+{% row 'justify-content-center mt-4 mb-4' %}
+    {% col 'col-8 rounded' %}
+        {% include "blog/post-comments.html" %}
+    {% endcol %}
+{% endrow %}
 
-{% row %}
-    {% col %}
-      {% cache 3600 recent_posts post %}
+{% row 'justify-content-center' %}
+    {% col 'col-8 rounded' %}
+    {% cache 3600 recent_posts post %}
         {% recent_posts post %}
-      {% endcache %}
+    {% endcache %}
     {% endcol %}
 {% endrow %}
 

@@ -2,12 +2,15 @@
 {% load blog_extras %}
 
 {% block content %}
-
-    <h2>Blog Posts</h2>
+    {% row 'justify-content-center' %}
+        {% col 'col-8 mb-4 text-center' %}
+        <h2>Blog Posts</h2>
+        {% endcol %}
+    {% endrow %}
 
     {% for post in posts %}
-    {% row 'border-bottom' %}
-        {% col %}
+    {% row 'justify-content-center' %}
+        {% col 'col-8 mb-4 shadow rounded' %}
             <h3>{{ post.title }}</h3>
             {% include 'blog/post-byline.html' %}
             <p>{{ post.summary }}</p>
