@@ -33,11 +33,13 @@ schema_view = get_schema_view(
 urlpatterns += [
     path("auth/", include("rest_framework.urls")),
     path("token-auth/", views.obtain_auth_token),
+    # Urls for swagger json schema
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
         schema_view.without_ui(cache_timeout=0),
         name="schema-json",
     ),
+    # Urls for swagger UI api views
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

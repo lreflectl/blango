@@ -56,7 +56,7 @@ class Dev(Configuration):
         'allauth.socialaccount.providers.google',
         'rest_framework',
         'rest_framework.authtoken',
-        'drf_yasg',
+        'drf_yasg',  # Yet another swagger ui library to enhance ui of the api
     ]
 
     MIDDLEWARE = [
@@ -226,7 +226,9 @@ class Dev(Configuration):
         ],
     }
 
+    # Settings for swagger UI for our API
     SWAGGER_SETTINGS = {
+        # Methods for authentication
         "SECURITY_DEFINITIONS": {
             "Token": {"type": "apiKey", "name": "Authorization", "in": "header"},
             "Basic": {"type": "basic"},
