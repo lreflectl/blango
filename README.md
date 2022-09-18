@@ -1,7 +1,4 @@
 # blango
 
-Starting point for the Advanced Django course. This is the equivalent of the following command:
+Advanced Django blog with API based on REST Framework, with Swagger UI.
 
-```bash
-$ django-admin.py startproject blango
-```
