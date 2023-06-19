@@ -33,13 +33,18 @@ class PostSerializer(serializers.ModelSerializer):
     )
 
     author = serializers.HyperlinkedRelatedField(
-        queryset=User.objects.all(), view_name="api_user_detail", lookup_field="email"
+        read_only=True, view_name="api_user_detail", lookup_field="email"
     )
     
     class Meta:
         model = Post
         fields = '__all__'
         readonly = ['modified_at', 'created_at']
+    
+    def create(self, validated_data):
+        validated_data["author"] = self.context["request"].user
+        return super(PostSerializer, self).create(validated_data)
+
 
 
 class PostDetailSerializer(PostSerializer):
