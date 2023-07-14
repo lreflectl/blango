@@ -1,3 +1,4 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework import generics
 from rest_framework import viewsets
 
@@ -18,8 +19,12 @@ from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers
+from django.db.models import Q
+from django.utils import timezone
+from django.http import Http404
 
-from rest_framework.exceptions import PermissionDenied
+from datetime import timedelta
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -43,8 +48,44 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @method_decorator(cache_page(120))
+    @method_decorator(vary_on_headers("Cookie", "Authorization"))
     def list(self, *args, **kwargs):
         return super(PostViewSet, self).list(*args, **kwargs)
+    
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            # only published posts
+            queryset = self.queryset.filter(published_at__lte=timezone.now())
+        elif self.request.user.is_staff:
+            # all posts
+            queryset = self.queryset
+        else:
+            # published and own posts
+            queryset = self.queryset.filter(
+                Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
+            )
+        
+        time_period_name = self.kwargs.get("period_name")
+
+        if not time_period_name:
+            # stop filtering
+            return queryset
+        
+        if time_period_name == "new":
+            return queryset.filter(
+                published_at__date=timezone.now() - timedelta(hours=1)
+            )
+        elif time_period_name == "today":
+            return queryset.filter(
+                published_at__date=timezone.now().date()
+            )
+        elif time_period_name == "week":
+            return queryset.filter(published_at__gte=timezone.now() - timedelta(days=7))
+        else:
+            raise Http404(
+                f"Time period {time_period_name} is not valid, should be "
+                f"'new', 'today' or 'week'"
+            )
 
 
 class UserDetail(generics.RetrieveAPIView):
