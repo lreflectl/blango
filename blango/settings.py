@@ -57,6 +57,7 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'drf_yasg',  # Yet another swagger ui library to enhance ui of the api
+        'django_filters',
     ]
 
     MIDDLEWARE = [
@@ -235,7 +236,13 @@ class Dev(Configuration):
           "anon_burst": "10/minute",
           "user_sustained": "5000/day",
           "user_burst": "100/minute",
-        }
+        },
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE": 100,
+        "DEFAULT_FILTER_BACKENDS": [
+            "django_filters.rest_framework.DjangoFilterBackend",
+            "rest_framework.filters.OrderingFilter"
+        ],
     }
 
     # Settings for swagger UI for our API
