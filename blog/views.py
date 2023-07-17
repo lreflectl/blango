@@ -41,7 +41,7 @@ def post_detail(request, slug):
         {'post': post, 'comment_form': comment_form}
     )
 
-
+# Helper view
 def get_ip(request):
     from django.http import HttpResponse
     return HttpResponse(request.META['REMOTE_ADDR'])
