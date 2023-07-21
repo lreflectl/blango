@@ -59,10 +59,11 @@ class Dev(Configuration):
         'rest_framework.authtoken',
         'drf_yasg',  # Yet another swagger ui library to enhance ui of the api
         'django_filters',
+        'versatileimagefield',
     ]
 
     MIDDLEWARE = [
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
@@ -260,6 +261,9 @@ class Dev(Configuration):
             "Basic": {"type": "basic"},
         }
     }
+
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
 
 
 class Prod(Dev):
