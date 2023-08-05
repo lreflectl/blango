@@ -1,46 +1,25 @@
-class Greeter {
-  constructor (name) {
-    this.name = name
-  }
+function resolvedCallback(data) {
+  console.log('Resolved with data: ' + data)
+}
 
-  getGreeting () {
-    if (this.name === undefined) {
-      return "Hello, noname!"
+function rejectedCallback(message) {
+  console.warn('Rejected with message: ' + message)
+}
+
+function lazyAdd(a, b) {
+  const doAdd = (resolve, reject) => {
+    if (typeof a !== "number" || typeof b !== "number") {
+      reject("a and b must both be numbers!")
     } else {
-      return "Hello, " + this.name + "!"
+      const sum = a + b
+      resolve(sum)
     }
   }
 
-  showGreeting (greetingMessage) {
-    console.log(greetingMessage)
-  }
-
-  greet () {
-    this.showGreeting(this.getGreeting())
-  }
+  return new Promise(doAdd)
 }
 
-class DelayedGreeter extends Greeter {
-  delay = 2000
+const myPromise = lazyAdd(3, 5)
+myPromise.then(resolvedCallback, rejectedCallback)
 
-  constructor (name, delay) {
-    super(name)
-    if (delay !== undefined) {
-      this.delay = delay
-    }
-  }
-
-  greet () {
-    setTimeout(
-      () => {
-        this.showGreeting(this.getGreeting())
-      }, this.delay
-    )
-  }
-}
-
-const delayedGreeter = new DelayedGreeter("Poppy", 1000)
-delayedGreeter.greet()
-
-const greeter2 = new Greeter("pecky")
-greeter2.greet()
+lazyAdd("foo", "bar").then(resolvedCallback, rejectedCallback)
