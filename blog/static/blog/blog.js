@@ -23,22 +23,31 @@ class PostRow extends React.Component {
 
 class PostTable extends React.Component {
   state = {
-    dataLoaded: true,
-    data: {
-      results: [
-        {
-          id: 15,
-          tags: ['django', 'react'],
-          hero_image: {
-            'thumbnail': '/media/__sized__/hero_images/akatsuki_logo-thumbnail-100x100-70.jpg',
-            'full_size': '/media/hero_images/snake-419043_1920.jpg'
-          },
-          title: 'Test Post',
-          slug: 'test-post',
-          summary: 'A test post, created for Django/React.'
+    dataLoaded: false,
+    data: null
+  }
+
+  // Its like post init (useful for api fetch, etc.)
+  componentDidMount () {
+    fetch(this.props.url).then(response => {
+      if (response.status !== 200) {
+        throw new Error('Invalid status from server: ' + response.statusText)
+      }
+      return response.json()
+    }).then(data => {
+      this.setState({
+        dataLoaded: true,
+        data: data
+      })
+    }).catch(e => {
+      console.error(e)
+      this.setState({
+        dataLoaded: true,
+        data: {
+          results: []
         }
-      ]
-    }
+      })
+    })
   }
 
   render () {
@@ -57,7 +66,7 @@ class PostTable extends React.Component {
       </tr>
     }
 
-    return <table className="table table-stripped table-bordered mt-2">
+    return <table className="table table-striped table-bordered mt-2">
       <thead>
       <tr>
         <th>Title</th>
@@ -75,8 +84,13 @@ class PostTable extends React.Component {
   }
 }
 
-const domContainer = document.getElementById('react_root')
+const tableConfig = JSON.parse(document.getElementById('table-config').textContent)
+const domContainer = document.getElementById('react-root')
+
 ReactDOM.render(
-  React.createElement(PostTable),
+  React.createElement(
+    PostTable,
+    {url: tableConfig.postListUrl}
+  ),
   domContainer
 )

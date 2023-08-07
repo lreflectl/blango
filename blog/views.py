@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.urls import reverse
 from blog.models import Post
 from blog.forms import CommentForm
 import logging
@@ -48,4 +49,9 @@ def get_ip(request):
 
 
 def post_table(request):
-    return render(request, 'blog/post-table.html')
+    context = {
+        "table_config": {
+            "postListUrl": reverse("post-list")
+        }
+    }
+    return render(request, 'blog/post-table.html', context)

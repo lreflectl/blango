@@ -7,9 +7,10 @@ Post Table
 {% endblock %}
 
 {% block content %}
+  {{ table_config|json_script:"table-config" }}
   <div class="row">
     <div class="col">
-      <div id="react_root"></div>
+      <div id="react-root"></div>
     </div>
   </div>
 
